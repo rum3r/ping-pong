@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ping Pong Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <h2>Waiting for another player...</h2>
+            <div class="loading-spinner"></div>
+        </div>
+    </div>
+    <div class="concurrent-players">
+        <span id="total-players">0</span> players online
+    </div>
+    <div class="game-container">
+        <div class="score">
+            <span id="player1-score">0</span>
+            <span id="player2-score">0</span>
+        </div>
+        <div class="game-area">
+            <div id="paddle1" class="paddle"></div>
+            <div id="ball" class="ball"></div>
+            <div id="paddle2" class="paddle"></div>
+        </div>
+    </div>
+    <script type="module" src="dist/game.js"></script>
+</body>
+</html> 
