@@ -9,12 +9,12 @@ class PingPongGame {
 
   private ballX: number = 392;
   private ballY: number = 192;
-  private ballSpeedX: number = 3;
-  private ballSpeedY: number = 3;
+  private ballSpeedX: number = 5;
+  private ballSpeedY: number = 5;
 
   private paddle1Y: number = 150;
   private paddle2Y: number = 150;
-  private paddleSpeed: number = 8;
+  private paddleSpeed: number = 15;
 
   private score1: number = 0;
   private score2: number = 0;
@@ -145,12 +145,8 @@ class PingPongGame {
 
   private movePaddle1(delta: number): void {
     if (this.isGameOver || this.playerNumber !== 1) return;
-    // Add smoothing to paddle movement with fixed time step
-    const timeStep = this.frameInterval / 1000; // Convert to seconds
-    const targetY = Math.max(
-      0,
-      Math.min(300, this.paddle1Y + delta * timeStep)
-    );
+    // Add smoothing to paddle movement
+    const targetY = Math.max(0, Math.min(300, this.paddle1Y + delta));
     this.paddle1Y += (targetY - this.paddle1Y) * 0.2; // Smoothing factor
     this.paddle1.style.top = `${this.paddle1Y}px`;
 
@@ -166,12 +162,8 @@ class PingPongGame {
 
   private movePaddle2(delta: number): void {
     if (this.isGameOver || this.playerNumber !== 2) return;
-    // Add smoothing to paddle movement with fixed time step
-    const timeStep = this.frameInterval / 1000; // Convert to seconds
-    const targetY = Math.max(
-      0,
-      Math.min(300, this.paddle2Y + delta * timeStep)
-    );
+    // Add smoothing to paddle movement
+    const targetY = Math.max(0, Math.min(300, this.paddle2Y + delta));
     this.paddle2Y += (targetY - this.paddle2Y) * 0.2; // Smoothing factor
     this.paddle2.style.top = `${this.paddle2Y}px`;
 
@@ -212,10 +204,8 @@ class PingPongGame {
   private updateBall(): void {
     if (this.isGameOver || !this.isHost) return;
 
-    // Use fixed time step for consistent speed
-    const timeStep = this.frameInterval / 1000; // Convert to seconds
-    this.ballX += this.ballSpeedX * timeStep;
-    this.ballY += this.ballSpeedY * timeStep;
+    this.ballX += this.ballSpeedX;
+    this.ballY += this.ballSpeedY;
 
     // Ball collision with top and bottom
     if (this.ballY <= 0 || this.ballY >= 385) {
@@ -314,26 +304,14 @@ class PingPongGame {
   private resetBall(): void {
     this.ballX = 392;
     this.ballY = 192;
-    this.ballSpeedX = (Math.random() > 0.5 ? 1 : -1) * 3;
-    this.ballSpeedY = (Math.random() > 0.5 ? 1 : -1) * 3;
+    this.ballSpeedX = (Math.random() > 0.5 ? 1 : -1) * 5;
+    this.ballSpeedY = (Math.random() > 0.5 ? 1 : -1) * 5;
   }
 
-  private gameLoop(timestamp: number = 0): void {
-    if (this.lastTime === 0) {
-      this.lastTime = timestamp;
-      requestAnimationFrame((t) => this.gameLoop(t));
-      return;
-    }
-
-    const deltaTime = timestamp - this.lastTime;
-
-    if (deltaTime >= this.frameInterval) {
-      this.updatePaddles();
-      this.updateBall();
-      this.lastTime = timestamp - (deltaTime % this.frameInterval);
-    }
-
-    requestAnimationFrame((t) => this.gameLoop(t));
+  private gameLoop(): void {
+    this.updatePaddles();
+    this.updateBall();
+    requestAnimationFrame(() => this.gameLoop());
   }
 }
 
